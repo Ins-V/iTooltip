@@ -1,11 +1,7 @@
 class iTooltip {
-  constructor (selector = false) {
+  constructor (selector = '*') {
     let qs = '*[title]'
-
-    if (selector && selector !== '*') {
-      qs = selector
-    }
-
+    if (selector !== '*') { qs = selector }
     this.objects = document.querySelectorAll(qs)
   }
 
