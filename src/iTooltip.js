@@ -51,10 +51,10 @@ export default class iTooltip {
         
         if (rightEdge <= tooltipWidth) {
             this.tooltip.style.left = null
-            this.tooltip.style.right = `${rightEdge - this.settings.indentX}px`
+            this.tooltip.style.right = `${rightEdge + this.settings.indentX}px`
         } else {
             this.tooltip.style.right = null
-            this.tooltip.style.left = `${event.clientX - this.settings.indentX}px`
+            this.tooltip.style.left = `${event.clientX + this.settings.indentX}px`
         }
 
         if (bottomEdge <= tooltipHeight) {
@@ -62,7 +62,7 @@ export default class iTooltip {
             this.tooltip.style.bottom = `${bottomEdge}px`
         } else {
             this.tooltip.style.bottom = null
-            this.tooltip.style.top = `${event.clientY - this.settings.indentY}px`
+            this.tooltip.style.top = `${event.clientY + this.settings.indentY}px`
         }
     }
 }
