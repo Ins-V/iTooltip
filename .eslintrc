@@ -1,8 +1,18 @@
 {
-  "extends": "eslint:recommended",
+  "extends": "airbnb/base",
   "parser": "babel-eslint",
   "globals": {
     "window": true,
     "document": true
+  },
+  "rules": {
+    "semi": ["error", "never"],
+    "space-before-function-paren": ["error", {
+      "anonymous": "always",
+      "named": "always",
+      "asyncArrow": "always"
+    }],
+    "no-shadow": ["error", { "allow": ["event"] }],
+    "new-cap": ["error", { "newIsCap": false }]
   }
 }
