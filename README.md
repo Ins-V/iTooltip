@@ -20,9 +20,9 @@ tooltip.init()
 ```js
 var tooltip = new iTooltip()
 tooltip.init({
-	className: 'my-class-name',
-	indentX: 3,
-	indentY: 3
+    className: 'my-class-name',
+    indentX: 3,
+    indentY: 3
 })
 ```
 
