@@ -29,7 +29,13 @@
 		<a href="#" title="Test tilte.">Hover Me!</a>
 	</div>
 
-	<script src="js/iTooltip.js"></script>
+	<script src="./dist/iTooltip.js"></script>
+	<script>
+		window.onload = function () {
+			let tooltip = new iTooltip()
+			tooltip.init()
+		}
+	</script>
 
 </body>
 </html>

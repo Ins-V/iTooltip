@@ -1,4 +1,4 @@
-export default class iTooltip {
+class iTooltip {
   constructor (selector = false) {
     let qs = '*[title]'
 
@@ -69,5 +69,4 @@ export default class iTooltip {
   }
 }
 
-const tooltip = new iTooltip()
-tooltip.init()
+module.exports = iTooltip
