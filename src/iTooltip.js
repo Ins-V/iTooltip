@@ -27,6 +27,7 @@ export default class iTooltip {
         this.tooltip = document.createElement('div')
         this.tooltip.classList.add(this.settings.className)
         this.tooltip.innerHTML = elem.getAttribute('title')
+        this.tooltip.style.position = 'absolute'
         this.tooltip.style.left = `${event.clientX + this.settings.indentX}px`
         this.tooltip.style.top = `${event.clientY + this.settings.indentY}px`
         elem.removeAttribute('title')
