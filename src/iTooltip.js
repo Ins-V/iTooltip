@@ -15,8 +15,10 @@ class iTooltip {
     this.settings = Object.assign(defaultOptions, options)
 
     this.objects.forEach((obj) => {
-      obj.addEventListener('mouseenter', event => this.createTooltip(event))
-      obj.addEventListener('mouseleave', event => this.removeTooltip(event))
+      if (obj.getAttribute('title')) {
+        obj.addEventListener('mouseenter', event => this.createTooltip(event))
+        obj.addEventListener('mouseleave', event => this.removeTooltip(event))
+      }
     })
   }
 
