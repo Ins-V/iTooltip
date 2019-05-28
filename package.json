@@ -1,7 +1,7 @@
 {
   "name": "itooltip",
-  "version": "0.0.1",
-  "description": "Simple tooltip.",
+  "version": "1.0.1",
+  "description": "The JavaScript library let’s you transform native tooltip’s into customizable overlays.",
   "main": "iTooltip.js",
   "scripts": {
     "dev": "webpack-dev-server --mode development --open",
