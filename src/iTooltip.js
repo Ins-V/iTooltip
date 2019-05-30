@@ -1,15 +1,14 @@
 class iTooltip {
   constructor (selector = '*') {
-    let qs = '*[title]'
-    if (selector !== '*') { qs = selector }
+    const qs = (selector !== '*') ? selector : '*[title]'
     this.objects = document.querySelectorAll(qs)
   }
 
   init (options = {}) {
     const defaultOptions = {
-      className: 'tooltip',
-      indentX: 10,
-      indentY: 15,
+      className: 'tooltip', // Changes the class name for a block.
+      indentX: 10, // Horizontal indent.
+      indentY: 15, // Vertical indent.
     }
 
     this.settings = Object.assign(defaultOptions, options)
@@ -43,9 +42,7 @@ class iTooltip {
   }
 
   moved (event) {
-    const tooltipClientRect = this.tooltip.getBoundingClientRect()
-    const tooltipWidth = tooltipClientRect.right - tooltipClientRect.left
-    const tooltipHeight = tooltipClientRect.bottom - tooltipClientRect.top
+    const [tooltipWidth, tooltipHeight] = this.getSizeTooltip()
     const rightEdge = document.documentElement.clientWidth - event.clientX
     const bottomEdge = document.documentElement.clientHeight - event.clientY
 
@@ -64,6 +61,17 @@ class iTooltip {
       this.tooltip.style.bottom = null
       this.tooltip.style.top = `${event.clientY + this.settings.indentY}px`
     }
+  }
+
+  getSizeTooltip () {
+    const tooltipClientRect = this.tooltip.getBoundingClientRect()
+    const tooltipWidth = tooltipClientRect.right - tooltipClientRect.left
+    const tooltipHeight = tooltipClientRect.bottom - tooltipClientRect.top
+
+    return [
+      tooltipWidth,
+      tooltipHeight,
+    ]
   }
 }
 
