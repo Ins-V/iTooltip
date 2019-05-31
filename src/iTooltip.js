@@ -1,3 +1,10 @@
+class DoubleCenterException {
+  constructor () {
+    const msg = 'iTooltip Error: positionX and positionY properties cannot be "center" at the same time.'
+    window.console.error(msg)
+  }
+}
+
 class iTooltip {
   constructor (selector = '*') {
     const qs = (selector !== '*') ? selector : '*[title]'
@@ -9,11 +16,14 @@ class iTooltip {
       className: 'tooltip', // Changes the class name for a block.
       indentX: 10, // Horizontal indent.
       indentY: 15, // Vertical indent.
-      positionX: 'right', // Start horizontal position. Variants: left, center, right
+      positionX: 'left', // Start horizontal position. Variants: left, center, right
       positionY: 'bottom', // Start vertical position. Variants: top, center, bottom
     }
 
     this.settings = Object.assign(defaultOptions, options)
+
+    if (this.settings.positionX === 'center'
+        && this.settings.positionY === 'center') { throw new DoubleCenterException() }
 
     this.objects.forEach((obj) => {
       if (obj.getAttribute('title')) {
@@ -29,12 +39,9 @@ class iTooltip {
     this.tooltip.classList.add(this.settings.className)
     this.tooltip.innerHTML = elem.getAttribute('title')
     this.tooltip.style.position = 'absolute'
-    // this.tooltip.style.left = `${event.clientX + this.settings.indentX}px`
-    // this.tooltip.style.top = `${event.clientY + this.settings.indentY}px`
+    this.changePosition(event)
     elem.removeAttribute('title')
-
     document.body.appendChild(this.tooltip)
-
     elem.addEventListener('mousemove', event => this.changePosition(event))
   }
 
@@ -46,22 +53,55 @@ class iTooltip {
   changePosition (event) {
     const [tooltipWidth, tooltipHeight] = this.getSizeTooltip()
     const edges = this.getEdges(event)
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+    let horizontalPosition = event.pageY
 
-    if (edges.right <= tooltipWidth) {
-      this.tooltip.style.left = null
-      this.tooltip.style.right = `${edges.right + this.settings.indentX}px`
+    if (this.settings.positionX === 'left') {
+      if (edges.right <= tooltipWidth) {
+        this.tooltip.style.left = null
+        this.tooltip.style.right = `${edges.right + this.settings.indentX}px`
+      } else {
+        this.tooltip.style.right = null
+        this.tooltip.style.left = `${event.clientX + this.settings.indentX}px`
+      }
+    } else if (this.settings.positionX === 'right') {
+      if (edges.left <= tooltipWidth) {
+        this.tooltip.style.right = null
+        this.tooltip.style.left = `${edges.left + this.settings.indentX}px`
+      } else {
+        this.tooltip.style.left = null
+        this.tooltip.style.right = `${edges.right + this.settings.indentX}px`
+      }
     } else {
+      let half = Math.round(tooltipWidth / 2)
+
+      if (edges.left <= half) { half = edges.left }
+
       this.tooltip.style.right = null
-      this.tooltip.style.left = `${event.clientX + this.settings.indentX}px`
+      this.tooltip.style.left = `${event.clientX - half}px`
     }
 
-    if (edges.bottom <= tooltipHeight) {
-      this.tooltip.style.top = null
-      this.tooltip.style.bottom = `${edges.bottom}px`
+    if (this.settings.positionY === 'top') {
+      horizontalPosition = (edges.top <= tooltipHeight)
+        ? scrollTop + event.clientY + this.settings.indentY
+        : event.pageY - tooltipHeight - this.settings.indentY
+    } else if (this.settings.positionY === 'bottom') {
+      horizontalPosition = (edges.bottom < tooltipHeight
+        && edges.top > (tooltipHeight + this.settings.indentY))
+        ? event.pageY - tooltipHeight - this.settings.indentY
+        : scrollTop + event.clientY + this.settings.indentY
     } else {
-      this.tooltip.style.bottom = null
-      this.tooltip.style.top = `${event.clientY + this.settings.indentY}px`
+      let half = Math.round(tooltipHeight / 2)
+
+      if (edges.bottom <= half) {
+        half = Math.round(tooltipHeight - edges.bottom)
+      }
+      if (edges.top <= half) { half = edges.top }
+
+      horizontalPosition -= half
     }
+
+    this.tooltip.style.top = `${horizontalPosition}px`
   }
 
   getSizeTooltip () {
@@ -77,16 +117,12 @@ class iTooltip {
 
   getEdges = (event) => {
     const docElement = document.documentElement
-    const left = event.clientX
-    const right = docElement.clientWidth - event.clientX
-    const top = event.clientY
-    const bottom = docElement.clientHeight - event.clientY
 
     return {
-      left,
-      right,
-      top,
-      bottom,
+      left: event.clientX,
+      right: docElement.clientWidth - event.clientX,
+      top: event.clientY,
+      bottom: docElement.clientHeight - event.clientY,
     }
   }
 }
