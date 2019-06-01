@@ -16,7 +16,7 @@ class iTooltip {
       className: 'tooltip', // Changes the class name for a block.
       indentX: 10, // Horizontal indent.
       indentY: 15, // Vertical indent.
-      positionX: 'left', // Start horizontal position. Variants: left, center, right
+      positionX: 'right', // Start horizontal position. Variants: left, center, right
       positionY: 'bottom', // Start vertical position. Variants: top, center, bottom
     }
 
@@ -55,30 +55,20 @@ class iTooltip {
     const edges = this.getEdges(event)
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop
     let horizontalPosition = event.pageY
+    let verticalPosition = event.pageX
 
-    if (this.settings.positionX === 'left') {
-      if (edges.right <= tooltipWidth) {
-        this.tooltip.style.left = null
-        this.tooltip.style.right = `${edges.right + this.settings.indentX}px`
-      } else {
-        this.tooltip.style.right = null
-        this.tooltip.style.left = `${event.clientX + this.settings.indentX}px`
-      }
-    } else if (this.settings.positionX === 'right') {
-      if (edges.left <= tooltipWidth) {
-        this.tooltip.style.right = null
-        this.tooltip.style.left = `${edges.left + this.settings.indentX}px`
-      } else {
-        this.tooltip.style.left = null
-        this.tooltip.style.right = `${edges.right + this.settings.indentX}px`
-      }
+    if (this.settings.positionX === 'right') {
+      verticalPosition = (edges.right <= tooltipWidth)
+        ? event.clientX - tooltipWidth - this.settings.indentX
+        : event.clientX + this.settings.indentX
+    } else if (this.settings.positionX === 'left') {
+      verticalPosition = (edges.left <= tooltipWidth)
+        ? edges.left + this.settings.indentX
+        : event.clientX - tooltipWidth - this.settings.indentX
     } else {
-      let half = Math.round(tooltipWidth / 2)
-
-      if (edges.left <= half) { half = edges.left }
-
-      this.tooltip.style.right = null
-      this.tooltip.style.left = `${event.clientX - half}px`
+      verticalPosition = (edges.left <= Math.round(tooltipWidth / 2))
+        ? event.clientX - edges.left
+        : event.clientX - Math.round(tooltipWidth / 2)
     }
 
     if (this.settings.positionY === 'top') {
@@ -102,6 +92,7 @@ class iTooltip {
     }
 
     this.tooltip.style.top = `${horizontalPosition}px`
+    this.tooltip.style.left = `${verticalPosition}px`
   }
 
   getSizeTooltip () {
