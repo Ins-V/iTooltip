@@ -1,6 +1,6 @@
 {
   "name": "itooltip",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "The JavaScript library let’s you transform native tooltip’s into customizable overlays.",
   "main": "iTooltip.js",
   "scripts": {
