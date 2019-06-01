@@ -125,7 +125,13 @@ var tooltip = new iTooltip()
 tooltip.init({
 	className: 'my-class-name', // Changes the class name for a block with a hint.
 	indentX: 3, // Horizontal indent. (In pixels)
-	indentY: 3 // Vertical indent. (In pixels)
+	indentY: 3, // Vertical indent. (In pixels)
+	// The initial position of the tooltip horizontally.
+	positionX: 'left', // Variants: 'left', 'right', 'center'.
+	// The initial position of the tooltip vertically.
+	positionY: 'center' // Variants: 'top', 'bottom', 'center'.
+	// WARNING!
+	// positionX and positionY can not simultaneously have the value "center".
 })</code></pre>
 		</div>
 	</section>
@@ -139,6 +145,8 @@ tooltip.init({
 				<li><b>className</b> - tooltip</li>
 				<li><b>indentX</b> - 10px</li>
 				<li><b>indentY</b> - 15px</li>
+				<li><b>positionX</b> - right</li>
+				<li><b>positionY</b> - bottom</li>
 			</ul>
 		</div>
 	</section>
